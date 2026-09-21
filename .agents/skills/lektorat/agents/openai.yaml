@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lektorat"
+  short_description: "Behutsames Lektorat markierter LaTeX-Texte"
+  default_prompt: "Verwende $lektorat, um den markierten Text zu prüfen, ohne ihn vor meiner Freigabe zu verändern."

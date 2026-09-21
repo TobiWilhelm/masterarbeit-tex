@@ -1,0 +1,45 @@
+\section{Bewertungsraster zur Evaluierung der Programmieraufgabe}
+Zur Bewertung der Ausarbeitungen der ProbandInnen wird ein analytisches Bewertungsraster (Rubric) verwendet, das primär auf dem evidenzbasierten Modell von \parencite{stegeman_designing_2016} basiert. Dieses Instrument wurde spezifisch für das Feedback in Einführungskursen der Programmierung (CS1) entwickelt und folgt dem Ansatz eines \textit{Instructional Rubric}. Ziel eines solchen Bewertungsrasters ist es zum einen eine summative Note zu generieren. Zum anderen auch dem Lernenden die Lücke zwischen der aktuellen Leistung und der erwarteten Qualität transparent zu machen. Im Falle der Studie ist der erste Aspekt ausschlaggebend.
+
+\begin{landscape}
+\centering
+{\footnotesize
+\setlength{\tabcolsep}{4pt}
+\renewcommand{\arraystretch}{1.0}
+\setlength{\extrarowheight}{2pt} % <- wichtig gegen "Text drüber"
+
+\begin{tabularx}{\linewidth}{|>{\raggedright\arraybackslash}m{2.4cm}|c|Y|Y|Y|Y|}
+\hline
+\textbf{Kategorie} & \textbf{Gewichtung} & \textbf{Level 1 (Problematisch)} & \textbf{Level 2 (Kernziele nicht erreicht)} & \textbf{Level 3 (Kernziele erreicht)} & \textbf{Level 4 (Kernziele übertroffen)} \\
+\hline
+Funktionalität \& Robustheit & 0.45 & Runtime Errors, grundlegende Anwendungsfälle funktionieren nicht & Ein Teil der Anforderungen ist korrekt implemntiert, bei anderen treten Laufzeitfehler oder falsche Ergebnisse auf oder sind nicht implementiert & Alle Anforderungen werden erfüllt inklusive positver Tests & Zusätzlich zu Level 3 ist der Code robust gegen Randfälle und ungültigen Eingaben \\
+\hline
+Namen & 0.10 & Unklare oder irreführende Namen & Namen beschreiben ihren Zweck grunsätzlich zutreffend. Sie weisen aber inkonsistente Schreibweisen auf, sind fehlerhaft geschrieben oder sehr lang & Namen beschreiben ihren Zweck treffend. Konsistentes snake\_case, korrekt geschrieben & Zusätzlich zu Level 3 wird im gesamten Programm ein einheitliches Vokabular zur Namensgebung verwendet\\
+\hline
+Layout \& Formatierung & 0.10 & Erschwerte Lesbarkeit durch eine zu lange Zeilenlänge, falsche Einrückungen oder zurückgelassenen auskommentierten Code & Beabsichtigte Struktur ist grundsätzlich erkennbar. Inkonsistente Formatierung ähnlicher Blöcke & Konsistente Einrückung und Struktur. Zeilenlängen unterstützen die Lesbarkeit & Vollständig PEP 8 konform. Code-Elemente sind einheitlich formatiert und auch über mehrere Dateien konsitent positioniert. \\
+\hline
+Kontrollfluss & 0.15 &Verschachtelung > 7 Ebenen, unerreichbarer Code, mehrere Anweisungen pro Zeile & Verschachtelung > 5 Ebenen, viele Sprünge (continue, break oder return), entählt doppelten Code & Einfacher Kontrollfluss, wenige Sonderfälle oder Sprünge, begrenzte Codeduplikation & Zusätzlich zu Level 3 bleibt der häufigste Ausführungspfad auch bei Sonderfällen oder Sprüngen klar erkennbar. \\
+\hline
+Idiomatische Programmierung & 0.10 & Kontrollstrukturen werden zweckentfremdet oder irreführend nachgebildet & Unangemessene Wahl der Kontrollstruktur für die jeweilige Aufgabe & Angemessene Wahl der Kontrollstruktur. Verwendung von Bibliotheksfunktionen kann noch begrenzt sein & Zusätzlich zu Level 3 werden Bibliotheksfunktionen und Standard-Datenstrukturen umfassend verwendet.\\
+\hline
+Aufteilung in Funktionen & 0.10 & Monolithischer Code, Variablen werden für unterschiedliche Zwecke wiederverwendet lange unübersichtliche Funktionen & Funktionen sind in ihrer Länge begrenzt, vermischen aber unterschiedliche Aufgaben & Funktionen bearbeiten eine überschaubare Menge von Aufgaben mit nachvollziehbarer interner Gliederung & Zusätzlich zu Level 3 bearbeiten Funktionen eine eng abgegrenzte Aufgabe. Geringe Parameterzahl und begrenzte Zahl gemeinsam genutzter Variablen. \\
+\hline
+\end{tabularx}
+}
+
+\captionof{table}{Bewertungsraster V2 nach \parencite{stegeman_designing_2016}}
+\label{tab:bewertungsrasterV2}
+\end{landscape}
+
+Das Raster (Abb. \ref{tab:bewertungsrasterV2}) bewertet die Code-Qualität anhand von sechs Eigenschaften. Es unterteilt die erbrachte Leistung in vier Erfüllungsgrade. Eine Einordnung in Level 1 bedeutet, dass in dieser Kategorie problematische Teile vorhanden sind. In Level 2 sind die zentralen Kernziele nicht ganz erreicht, es wurde jedoch Code produziert, der keine problematischen Elemente mehr enthält. Ab Level 3 sind die Kernziele erreicht und in Level 4 sogar darüber hinaus. Den Bewertungsstufen werden folgende Punkte zugeordnet: Level 1 entspricht 10 Punkten, Level 2 entspricht 20 Punkten, Level 3 entspricht 30 Punkten und Level 4 entspricht 40 Punkten.
+
+Die einzelnen Leistungsanforderungen sind in Tabelle \ref{tab:bewertungsrasterV2} aufgeschlüsselt. Die Kategorien des Rasters wurden aus dem iterativen Design-Prozess für Bewertungsraster von \parencite{stegeman_designing_2016} abgeleitet. Die validierten Kriterien Namen (\textit{names}), Layout \& Formatierung (\textit{layout/formatting}), Kontrollfluss (\textit{flow}), Idiomatische
+Programmierung (\textit{idiom}) und Aufteilung in Funktionen (\textit{decomposition}) werden für den Bewertungsraster der vorliegenden Arbeit adaptiert. So wurden die im Paper ursprünglich für C und Swift entwickelten Deskriptoren für den Kontext der Sprache Python angepasst. Hervorzuheben ist hierbei snake\_case für Variablennamen gemäß PEP 8\footnote{Link zum Python-Styleguide PEP 8: \href{https://peps.python.org/pep-0008/}{https://peps.python.org/pep-0008/}}.
+
+Zudem wird für die Kategorie Kontrollfluss die Kennzahl Verschachtelung auf Level 1 definiert als mehr als sieben ineinanderfolgende Kontrollstrukturen innerhalb einer Funktion. Auf Level 2 werden Verschachtelungen von mehr als 5 Ebenen eingeordnet. Dabei werden Verzweigungen und Schleifen gemeinsam gezählt. Dieser Schwellenwert orientiert sich am Standardwert für das Attribut \textit{max-nested-blocks} mit dem Wert fünf aus der Pylint-Dokumentation\footnote{Link zur Pylint-Dokumentation: \href{https://pylint.readthedocs.io/en/latest/user_guide/configuration/all-options.html\#max-nested-blocks}{pylint}}.
+
+
+\subsection{Ergänzung der Dimension \enquote{Funktionalität und Robustheit}}
+Das Modell von \parencite{stegeman_designing_2016} fokussiert sich explizit auf die Code Qualität wie Lesbarkeit, Wartbarkeit und Struktur, die funktionale Korrektheit ist ausklammert. Um jedoch einen umfassendere Bewertung der Abgaben zu gewährleisten, werden Abgaben einer Überprüfung der Laufzeit-Korrektheit unterzogen. Daher wurde das Raster um die Kategorie "Funktionalität \& Robustheit" erweitert. Diese Kategorie folgt dem Konzept der vier Erfüllungsgrade aus \parencite{stegeman_designing_2016} und wendet sie auf das Laufzeitverhalten an: Level 1 markiert instabilen Code (Abstürze/Runtime Errors), Level 2 funktional falsche Ergebnisse (Logic Errors), Level 3 die korrekte Erfüllung der Spezifikation (Happy Path) und Level 4 eine erhöhte Robustheit gegenüber Randfällen (Edge Cases).
+
+Der Kategorie vorgeschaltet ist Überprüfung der Ausführbarkeit: Code, der aufgrund von Syntaxfehlern nicht vom Interpreter verarbeitet werden kann, fürht dazu dass die Abgabe ein Level abrutscht.

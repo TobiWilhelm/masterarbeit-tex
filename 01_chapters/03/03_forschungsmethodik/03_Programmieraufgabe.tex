@@ -1,0 +1,89 @@
+\section{Konzeption der Programmieraufgabe: Das „Garden-Simulator“-Framework}
+
+Nach dem persönlichen Fragebogen und nachdem die Entwicklungsumgebung bereitsteht, soll die Programmieraufgabe von den Studierenden bearbeitet werden. Dieses Kapitel behandelt den Aufbau und Hintergrund des Python-Programms \anf{Garden-Simulator}, die Aufgabenerstellung sowie die erwarteten Lösungen und die Testumgebung.
+
+\subsection{Der \anf{Garden-Simulator}}
+Der Garden sim
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{00_figures/garden-sim.png}
+  \caption{Startansicht des Garden-Simulators mit ausgeführtem show-Befehl}
+  \label{fig:garden-sim}
+\end{figure}
+
+
+\subsubsection{README.md als Informationsquelle}
+
+\subsection{Programmstruktur des \anf{Garden-Simulators}}
+Funktional bildet der Simulator einen festgelegten Handlungszyklus ab: Zuerst wird ein Feld gegraben, anschließend bepflanzt, danach regelmäßig gegossen, die Zeit wird tageweise fortgeschritten und schließlich kann geerntet werden. Die Ausgabe erfolgt im Terminal als leicht lesbares Raster mit einfachen Symbolen, ergänzt um Zeilen- und Spaltenindizes, damit Interaktionen über Koordinaten nachvollziehbar bleiben. 
+
+Diese Regeln sind in einer Zustandslogik definiert: 
+
+
+\begin{itemize}
+    \item Graben ist nur auf leeren Feldern möglich und erzeugt ein „hole“
+    \item Pflanzen ist ausschließlich auf einem „hole“ erlaubt und erzeugt ein „seed“
+    \item Gießen ist nur bei „seed“ oder „sprout“ zulässig und erhöht den Wasserstand bis zu einem Maximalwert
+    \item Das Fortschreiten eines Tages wirkt auf alle Zellen gleichzeitig. Der Wasserstand wird pro neuem Tag um 1 verringert.
+    \item Ernten ist wiederum nur im Zustand „ripe“ möglich
+\end{itemize}
+
+Die in Abb. \ref{fig:garden-sim-aufbau} gezeigte Repository-Struktur trennt klar zwischen Kernlogik, Darstellung und Interaktion. In garden.py liegt die zentrale Logik als Sammlung von Funktionen; dort werden gezielt Stubs mit Docstrings, Kommentaren und Beispielen bereitgestellt, die zunächst noch nicht implementiert sind und teils NotImplementedError auslösen. In cli\_view.py befindet sich eine vorgegebene, von Studierenden nicht zu verändernde Hilfsklasse (GardenPrinter), die den Garten ausschließlich liest und als Text darstellt; dadurch wird eine konsistente Visualisierung sichergestellt, ohne dass Studierende bereits objektorientierte Konzepte benötigen. main.py stellt eine einfache Kommandozeilen-Interaktion bereit, in der Befehle wie \texttt{dig r c}, \texttt{plant r c crop}, \texttt{water r c}, \texttt{day}, \texttt{harvest r c} oder \texttt{show} eingegeben werden können. Das Parsing erfolgt bewusst mit String split und if/else, um den Fokus auf Kontrollstrukturen, Zustandsprüfungen und Datenmanipulation zu legen.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{00_figures/garden-sim-struc_2.png}
+  \caption{Repository-Aufbau des \anf{Garden-Simulators}}
+  \label{fig:garden-sim-aufbau}
+\end{figure}
+
+In test\_garden.py sind unter Zuhilfenamhe des pytest-Frameworks Unit-Tests hinterlegt, die für jede Funktion konkret festlegen, welches Verhalten erwartet wird wie z. B. erlaubte Zustandswechsel, Rückgabewerte oder out-of-bounds-Fälle. Für Studierende dienen diese Tests als verlässliche Referenz, weil sie nach jeder Implementationsänderung sofortiges, objektives Feedback liefern und typische Fehler klar sichtbar machen. Gleichzeitig bilden die Tests eine transparente Grundlage für die Auswertung. Wenn das Programm alle Tests besteht, erfüllt es Level 4 der Kategorie \enquote{Funktionaliät und Robustheit} des Bewertungsrasters in Tabelle \ref{tab:bewertungsrasterV2}.
+
+\subsection{Erstellung der Aufgaben nach UMC-Framework}\label{sec:Aufgabenstellung}
+Als Programmieraufgabe sollen die Studierenden in der bestehenden Python CLI-Anwendung \textit{Garden-Simulator} bestimmte Use Cases implementieren. Das didaktische Design dieser Unterrichtseinheit basiert auf dem Use-Modify-Create (UMC) Framework, wie es ursprünglich von \textcite{lee_umc_2011} definiert wurde. Empirische Studien, wie die von \textcite[S.~400]{lytle_use_2019} zeigen, dass dieser Ansatz insbesondere ab der Modify-Phase zum einen die Identifikation mit dem selbst geschriebenen Code (Ownership) stärkt. Zum anderen und für diese Arbeit wichtiger wird auch die Überforderung bzw. die kognitve Last auf Studierendenseite reduziert.
+
+Die Programmieraufgabe ist in die drei Phase des UMC-Frameworks aufgeteilt. In der ersten Phase (Use) geht es um das Kennenlernen und Ausführen des Source Codes. Im Fall des Garden-Simulators sollen auch einfach Commands in das Command Line Interface (CLI) eingegeben und ausgeführt werden. Die zweite Phase fordert von den Studierenden, den in Phase 1 genutzten Code iterativ anzupassen. Um den Code gezielt zu verändern, muss auf Seite der Studierenden zumindest Teile der inneren Logik durchdrungen worden sein. Die dritte und finale Phase besteht aus der Erweiterung des bestehenden Artefakts. Die Studierenden fügen hier weitesgehend eigenständig eine neue Funktion hinzu. Was zu implemtieren ist, wird aufgrund der begrenzten Zeit verbal vorgegeben, auf eine zu detaillierte Aufgabenbeschreibung oder Hinweise im Code wurden jedoch verzichtet. \parencite{lee_umc_2011}.
+
+Die folgenden Aufgaben sind von den Studierenden zu implementieren. 
+\begin{enumerate}
+  \item Führe den \texttt{help} command aus und sehe dir die Liste an Commands an. Gehe einen Harvest-Zyklus für das Crop \enquote{tomato} in der CLI durch. Führe dafür folgende Commands aus: \texttt{dig}, \texttt{plant}, \texttt{water}, \texttt{day}, \texttt{water}, \texttt{day}, \texttt{water}, \texttt{day}, \texttt{harvest}.
+  \item Für den Command \texttt{quit} fehlt die Beschreibung im help-Befehl. Füge
+  \begin{enumerate}
+    \renewcommand{\labelenumii}{\roman{enumii}.}
+    \item \enquote{quit} als Command-Name hinzu,
+    \item \enquote{Exit the simulator} als Beschreibung und
+    \item \enquote{quit} als Beispiel.
+  \end{enumerate}
+  \item Wenn eine Tomate geerntet wird, wird eine Datei names tomato.txt erstellt. Der User soll über das Erstellen der tomato.txt informiert werden. Der Satz \enquote{Created file 'tomato.txt' at <current datetime>} soll in der Konsole ausgegeben werden. Die Aufgabe ist im Code mittels Kommentarblöcken markiert.
+  \newline
+  Beispiel:
+  \newline
+  \texttt{Created file 'tomato.txt' at 18.05.2026 18:36:22.}
+
+  \item Wenn keine Tomate geerntet wird, soll bei den anderen Crops in der Konsole der Satz ausgegeben werden: \enquote{[Info] The crop <name of the crop> has no file entry.}
+  \newline
+  Beispiel:
+  \newline
+  \texttt{[Info] The crop carrot has no file entry.}
+
+  \item Füge ein neues Crop \enquote{potato} hinzu. Man soll es schon nach 2 \texttt{water} + \texttt{day} Zyklen ernten können. Die Aufgabe ist im Code nicht mittels Kommentarblöcken markiert. Es müssen dazu Änderungen in beiden Dateien main.py und garden.py gemacht werden.
+
+\end{enumerate}
+
+\subsection{Musterlösung der Aufgaben und Programmierkonzepte}
+TODO
+
+
+\subsection{Lokale Tests zur Selbstüberprüfung}
+
+Um herauszufinden, ob die jeweilige Teilaufgabe korrekt erledigt wurde, können die Studierenden mittels des Commands \texttt{python test\_runner.py} lokale Tests ausführen. Ein Report über bestandene und nicht bestandene Testcases, wie in Abb. \ref{fig:test-runner-results} dargestellt, wird im Terminal präsentiert. Die Tests sollen den Programmier-Prozess der Studierenden unterstützen und so einerseits die korrekte Erledigung einer Aufgabe validieren und andererseits als Debugging-Instrument dienen. Letzteres, also das Lösen einzelner Probleme oder Fehler im Code, ist nach \textcite[S.~26]{edwards_using_2004} ProgrammiereinsteigerInnen besonders zeitintensiv und resultiert oft in wahllosen Herumprobieren. Idealerweise sollten die Tests von den Studierenden im Rahmen des Test Driven Developments selbst verfasst werden \parencites[S.~27--28]{edwards_using_2004}[S.~532--533]{janzen_test-driven_2008}. In der vorliegenden Arbeit werden die Tests hingegen aufgrund der begrenzten Bearbeitungszeit bereitgestellt.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{00_figures/test-runner-false.png}
+  \caption{Ausgabe des lokalen Testrunners bei fehlgeschlagenen und bestandenen Tests}
+  \label{fig:test-runner-results}
+\end{figure}
+
+Wie in Abb. \ref{fig:test-runner-results} zu sehen ist, gibt es für jede Teilaufgabe einen eigenen Test. Als Hilfestellung und um den Testcase zu konkretisieren wird bei jedem fehlgeschlagenen Testcase ein Statustext ausgegeben. So wird z.B. für die nicht erfüllte Teilafgabe drei ausgegeben: \enquote{The required timestamped file creation message was not printed.} Für Teilaufgabe fünf gibt es jedoch zwei Tests. Denn, wie in der Aufgabenstellung in \ref{sec:Aufgabenstellung} erwähnt, müssen hier die benötigten \texttt{day}- und \texttt{water}-Zyklen bis zur Erntereife für das Crop \texttt{potato} adaptiert werden. Es kann hierbei aber passieren, dass die Zyklenanzahl auch für andere Crops verändert wird. Daher wird im letzten Testcase überprüft, ob für ein anderes Crop, in diesem Fall \texttt{carrot}, weiterhin die regulären drei \texttt{day}- und \texttt{water}-Zyklen bis zur Reife erforderlich sind.

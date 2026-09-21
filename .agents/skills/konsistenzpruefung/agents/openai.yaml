@@ -1,0 +1,4 @@
+interface:
+  display_name: "Konsistenzprüfung"
+  short_description: "Prüft die Masterarbeit auf Konsistenz"
+  default_prompt: "Verwende $konsistenzpruefung, um die gesamte Masterarbeit auf terminologische und formale Konsistenz zu prüfen, ohne Dateien zu verändern."
