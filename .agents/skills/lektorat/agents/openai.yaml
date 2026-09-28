@@ -1,4 +1,4 @@
 interface:
   display_name: "Lektorat"
-  short_description: "Behutsames Lektorat markierter LaTeX-Texte"
-  default_prompt: "Verwende $lektorat, um den markierten Text zu prüfen, ohne ihn vor meiner Freigabe zu verändern."
+  short_description: "LaTeX-Lektorat mit Satzfreigabe, Diff-Review und Rücknahme"
+  default_prompt: "Verwende $lektorat, um den markierten Text zu prüfen, notwendige Korrekturen und optionale Anregungen in getrennten Blöcken und separat freigebbaren Satzfassungen zu zeigen, nur genehmigte Fassungen anzuwenden und native Diff-Review-Funktionen sowie eine gezielte Rücknahme zu nutzen."
