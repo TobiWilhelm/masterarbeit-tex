@@ -3,7 +3,30 @@
 Nach dem persönlichen Fragebogen und nachdem die Entwicklungsumgebung bereitsteht, soll die Programmieraufgabe von den Studierenden bearbeitet werden. Dieses Kapitel behandelt den Aufbau und Hintergrund des Python-Programms \anf{Garden-Simulator}, die Aufgabenerstellung sowie die erwarteten Lösungen und die Testumgebung.
 
 \subsection{Der \anf{Garden-Simulator}}
-Der Garden sim
+Der \textit{Garden-Simulator} ist eine didaktische Python-Applikation, die die Studierenden im Zuge der einstündigen Studie adaptieren sollen. Das Programm wird im folgenden Kapitel anhand der \textit{4+1 View Model}-Methode nach \textcite{kruchten_41_1995} erläutert.
+
+\subsubsection{Logische Architektur}
+\textcite[S.~3]{kruchten_41_1995} spircht im Bereich der logischen Architektur von der objektorientierten Zerlegung (Dekomposition) der Problemstellung bzw. Anforderung in ihre zentralen Aspekte als Objekte oder Objektklassen. Dabei kommen die Prinzipien der Abstraktion, Kapselung und Vererbung zum Einsatz. Diese Zerlegung dient nicht nur der funktionalen Analyse, sondern auch dazu, gemeinsame Mechanismen und Entwurfselemente in den verschiedenen Teilen des Systems zu identifizieren \parencite[S.~3]{kruchten_41_1995}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{00_figures/logical-view.png}
+  \caption{Logik-Ansicht des Garden Simulators}
+  \label{fig:logik-view}
+\end{figure}
+
+Im \textit{Garden-Simulator} wurde aufgrund der didaktischen Ausrichtung und des einstündigen Zeitrahmens mit Absicht auf eine umfangreiche Klassen-Struktur verzichtet. Einzig, wie es in Abb. \ref{fig:logik-view} zu erkennen ist, wird für die Ausgabe des Spielfeldes im Terminal eine Klasse namens \textit{Garden-Printer} verwendet. Diese müssen die Studierenden aber nicht adaptieren. Zusätzlich zur Ausgabe-Klasse gibt es die Datei \textit{garden.py}, in der Funktionen wie \texttt{advance\_day} oder \texttt{dig} implemtiert sind und neben den anderen Funktionen in dieser Datei zur Kernlogik des Programms zählen. Beide, \textit{GardenPrinter} und \textit{garden.py}, werden in \textit{main.py} eingebunden, welche als Eintrittspunkt gilt und zur Kommando-Verwaltung verwendet wird. Änderungen am Programmcode sind von den Studierenden in den Dateien \textit{garden.py} sowie \textit{main.py} durchzuführen.
+
+
+\subsubsection{Prozessuale Architektur}
+
+
+\subsubsection{Entwicklungs-Architektur}
+
+
+\subsubsection{Physikalische Architektur}
+
+Aufgeteilt ist der \textit{Garden-Simulator}, wie in Abb.~\ref{fig:garden-sim-aufbau} dargestellt, in drei Hauptdateien \textit{main.py}, \textit{garden.py} und \textit{cli\_view.py}. Erstere stellt das Commandline Interface (CLI) dar, zweitere übernimmt die Logik des Simulators und letztere die visuelle Ausgabe im Terminal mittels \textit{show} Befehls, wie in Abb.~\ref{fig:garden-sim} zu sehen ist. Zusätzlich wird in \textit{test\_garden.py} ein Testprogramm beigelegt, anhand dessen die Studierenden den eigenen Fortschritt überprüfen können.
 
 \begin{figure}[htbp]
   \centering
