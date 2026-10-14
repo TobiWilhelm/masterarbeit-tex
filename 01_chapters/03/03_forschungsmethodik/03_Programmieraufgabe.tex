@@ -5,17 +5,80 @@ Nach dem persönlichen Fragebogen und nachdem die Entwicklungsumgebung bereitste
 \subsection{Der \anf{Garden-Simulator}}
 Der \textit{Garden-Simulator} ist eine didaktische Python-Applikation, die die Studierenden im Zuge der einstündigen Studie adaptieren sollen. Das Programm wird im folgenden Kapitel anhand der \textit{4+1 View Model}-Methode nach \textcite{kruchten_41_1995} erläutert.
 
-\subsubsection{Logische Architektur}
-\textcite[S.~3]{kruchten_41_1995} spircht im Bereich der logischen Architektur von der objektorientierten Zerlegung (Dekomposition) der Problemstellung bzw. Anforderung in ihre zentralen Aspekte als Objekte oder Objektklassen. Dabei kommen die Prinzipien der Abstraktion, Kapselung und Vererbung zum Einsatz. Diese Zerlegung dient nicht nur der funktionalen Analyse, sondern auch dazu, gemeinsame Mechanismen und Entwurfselemente in den verschiedenen Teilen des Systems zu identifizieren \parencite[S.~3]{kruchten_41_1995}.
+\subsubsection{Logische Architektur}\label{cha:logische-architektur}
+\textcite[S.~3]{kruchten_41_1995} spricht im Bereich der logischen Architektur von der objektorientierten Zerlegung (Dekomposition) der Problemstellung bzw. Anforderung in ihre zentralen Aspekte als Objekte oder Objektklassen. Dabei kommen die Prinzipien der Abstraktion, Kapselung und Vererbung zum Einsatz. Diese Zerlegung dient nicht nur der funktionalen Analyse, sondern auch dazu, gemeinsame Mechanismen und Entwurfselemente in den verschiedenen Teilen des Systems zu identifizieren. Für datenorientierte Anwendungen können auch abweichende Darstellungsformen der logischen Sicht verwendet werden \parencite[S.~3]{kruchten_41_1995}.
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
   \centering
-  \includegraphics[width=0.9\textwidth]{00_figures/logical-view-v2.png}
-  \caption{Logik-Ansicht des Garden Simulators nach \textcite[S.~4]{kruchten_41_1995}}
+  \small
+  \setlength{\unitlength}{1mm}
+  \begin{picture}(140,131)
+    \put(40,111){\framebox(60,20){}}
+    \put(40,121){\makebox(60,10){\textbf{Kommandoverarbeitung}}}
+    \put(40,112){\makebox(60,9){Eingaben und vergangene Tage}}
+
+    \put(0,75){\framebox(65,22){}}
+    \put(0,89){\makebox(65,8){\textbf{Simulationslogik}}}
+    \put(0,77){\makebox(65,12){\shortstack{\texttt{dig(), plant(), water()}\\\texttt{advance\_day(), harvest()}}}}
+
+    \put(85,75){\framebox(55,22){}}
+    \put(85,89){\makebox(55,8){\textbf{Darstellung}}}
+    \put(85,77){\makebox(55,12){\shortstack{\texttt{GardenPrinter}\\Gartenraster im Terminal}}}
+
+    \put(54,111){\line(0,-1){6}}
+    \put(32,105){\line(1,0){22}}
+    \put(32,105){\vector(0,-1){8}}
+    \put(0,99){\makebox(29,7)[r]{ruft auf}}
+    \put(86,111){\line(0,-1){6}}
+    \put(86,105){\line(1,0){26}}
+    \put(112,105){\vector(0,-1){8}}
+    \put(115,99){\makebox(25,7)[l]{ruft auf}}
+
+    \put(32,75){\line(0,-1){7}}
+    \put(32,68){\line(1,0){16}}
+    \put(48,68){\vector(0,-1){10}}
+    \put(0,59){\makebox(44,7)[r]{erzeugt und verändert}}
+    \put(112,75){\line(0,-1){7}}
+    \put(96,68){\line(1,0){16}}
+    \put(96,68){\vector(0,-1){10}}
+    \put(112,59){\makebox(28,7)[l]{liest}}
+
+    \put(30,0){\framebox(80,58){}}
+    \put(30,47){\makebox(80,11){\textbf{Garten: Raster aus Feldern}}}
+    \put(42,5){\framebox(56,39){}}
+    \put(42,34){\makebox(56,10){\textbf{Feld}}}
+    \put(42,34){\line(1,0){56}}
+    \put(42,5){\makebox(56,29){\shortstack[l]{\texttt{state}\\\texttt{crop}\\\texttt{water}\\\texttt{days\_as\_seed}}}}
+  \end{picture}
+  \caption[Logische Ansicht des Garden-Simulators]{Logische Architektur des Garden-Simulators. Darstellung nach \textcite[S.~3]{kruchten_41_1995}.}
   \label{fig:logik-view}
 \end{figure}
 
-Im \textit{Garden-Simulator} wurde aufgrund der didaktischen Ausrichtung und des einstündigen Zeitrahmens mit Absicht auf eine umfangreiche Klassen-Struktur verzichtet. Einzig, wie es in Abb. \ref{fig:logik-view} zu erkennen ist, wird für die Ausgabe des Spielfeldes im Terminal eine Klasse namens \textit{Garden-Printer} verwendet. Diese müssen die Studierenden aber nicht adaptieren. Zusätzlich zur Ausgabe-Klasse gibt es die Datei \textit{Garden}, in der Funktionen wie \texttt{advance\_day} oder \texttt{dig} implemtiert sind, die neben den anderen Funktionen dieser Datei zur Kernlogik des Programms zählen. Beide, \textit{GardenPrinter} und \textit{Garden}, werden in \textit{Main} eingebunden, welche als Eintrittspunkt gilt und zur Kommando-Verwaltung verwendet wird. Änderungen am Programmcode sind von den Studierenden in den Elementen \textit{Garden} sowie \textit{Main} durchzuführen.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{00_figures/garden-sim.png}
+  \caption{Startansicht des Garden-Simulators mit ausgeführtem show-Befehl.}
+  \label{fig:garden-sim}
+\end{figure}
+
+Im \textit{Garden-Simulator} wurde aufgrund der didaktischen Ausrichtung und des einstündigen Zeitrahmens mit Absicht auf eine umfangreiche Klassen-Struktur verzichtet. Im Mittelpunkt der logischen Sicht steht, wie in Abb.~\ref{fig:logik-view} dargestellt, der Garten als Raster aus einzelnen Feldern. Jedes Feld wird durch ein Python-Dictionary mit den Einträgen \texttt{state}, \texttt{crop}, \texttt{water} und \texttt{days\_as\_seed} versehen. Diese enthalten den Zustand, die Pflanzenart, den Wasserstand und die Anzahl der Wachstumstage, wenn ausreichend bewässert wurde. Am Anfang ist das Spielfeld leer, wie in Abb. \ref{fig:garden-sim} zu sehen ist.
+
+% "carrot", "tomato", "bean", "potato"
+
+Das \texttt{state}-Attribut kann die Werte \texttt{empty}, \texttt{hole}, \texttt{seed} oder \texttt{ripe} annehmen. Die Pflanzenart wird in \texttt{crop} gespeichert und kann \texttt{carrot}, \texttt{tomato}, \texttt{bean} oder \texttt{potato} sein. Auf einem unbepflanzten Feld enthält dieser Eintrag \texttt{None}. Die Einträge \texttt{water} und \texttt{days\_as\_seed} sind ganzzahlig (integer). \texttt{Water} hat einen Maximalwert von 1, was bedeutet, dass ein Feld entweder gegossen ist oder nicht. Wenn das Feld bepflanzt und gegossen ist und ein Tag mit \texttt{advance\_day} vergeht, steigt der \texttt{days\_as\_seed}-Zähler um 1. Sobald dieser einen Schwellenwert übertrifft, ist der Status des Feldes \texttt{ripe} und die Pflanze kann abgeerntet werden.
+
+Die Simulationslogik umfasst intern die Funktionen \texttt{dig()}, \texttt{plant()}, \texttt{water()}\\\texttt{advance\_day()} und \texttt{harvest()}, die die jeweiligen Felder des Spielfeldes verändern. Die Befehle folgen bestimmten Regeln, die unten angeführt sind: 
+\begin{itemize}
+    \item Graben mittels \texttt{dig} ist nur auf einem Feld mit dem Zustand \texttt{empty} möglich und ändert diesen zu \texttt{hole}.
+    \item Pflanzen mittels \texttt{plant} ist ausschließlich auf einem Feld mit dem Zustand \texttt{hole} erlaubt. Der Zustand wird zu \texttt{seed}, die gepflanzte Pflanzenart wird in \texttt{crop} eingetragen und \texttt{water} sowie \texttt{days\_as\_seed} werden auf null gesetzt.
+    \item Gießen mittels \texttt{water} ist nur im Zustand \texttt{seed} zulässig und erhöht den Wasserstand höchstens bis zum festgelegten Maximalwert \texttt{WATER\_MAX} von eins.
+    \item Der \texttt{day}-Befehl ruft \texttt{advance\_day} auf und wirkt auf alle Felder des Gartens. Ein Samen mit einem Wasserstand von mindestens eins erhält einen Wachstumstag und verringert dabei den Wasserstand um -1. Nach 3 Wachstumstagen erhält das Feld den status \texttt{ripe}.
+    \item Ernten mittels \texttt{harvest} ist nur im Zustand \texttt{ripe} möglich. Dabei wird die Pflanzenart zurückgegeben und das Feld auf \texttt{empty} zurückgesetzt. Der Eintrag \texttt{crop} wird auf \texttt{None} und die beiden Zähler \texttt{water} und \texttt{days\_as\_seed} werden auf null gesetzt.
+\end{itemize}
+
+Für die Ausgabe des Spielfeldes im Terminal wird die Klasse \texttt{GardenPrinter} verwendet. Dieser Klasse bekommt dieselben Daten wie die Simulationslogik übergeben und bereitet sie als Raster auf, ohne sie zu abzuändern. Die Studierenden müssen diese Klasse nicht adaptieren. Die Kommandoverarbeitung nimmt die Eingaben entgegen und ruft die entsprechenden Funktionen der Simulationslogik oder die Darstellung mittels \texttt{show}-Befehls auf. Weiters verwaltet sie die vergangenen globalen Simulationstage in der Variable \texttt{current\_day}, die bei jedem \texttt{day}-Befehl um eins erhöht wird. Dieser Wert ist von den oben erklärtern Wachstumstagen eines einzelnen Feldes zu unterscheiden.
+
+Die genaue Zuordnung der funktionalen Zuständigkeiten von Kommandoverarbeitung, Simulationslogik und Darstellung wird in der Entwicklungs-Architektur in Abschnitt~\ref{cha:entwicklungs-architektur} beschrieben.
 
 \subsubsection{Prozessuale Architektur}
 Bei der Prozessarchitektur geht es nach \textcite[S.~4]{kruchten_41_1995} um die Einordnung der wichtigsten Abstraktionen aus der logischen Sicht in die Prozess-Sicht, also die Frage, in welchem Abschnitt eine Operation eines Objekts ausgeführt wird. Weiters geht es um die Darstellung von gleichzeitgen oder wiederkehrenden Abläufen, Verteilung sowie Systemintegrität und Fehlertoleranz \parencite[S.~4]{kruchten_41_1995}.
@@ -119,15 +182,13 @@ Das aktuelle Garten-Spielfeld und der Tageszähler, der mit \texttt{advance\_day
 
 Der Grund für die Erstellung eines Ernte-Logs für Tomaten ist die erste Aufgabe (siehe Abschnitt \ref{cha:Aufgabenstellung}). Um diese Aufgabe erfolgreich zu absolvieren, müssen die Studierenden das Python-Programm über die Kommandozeile kennenlernen und mindestens einen Ernte-Zyklus für eine Tomate durchspielen. Am Ende des Zyklus wird die \texttt{tomato.txt} erstellt, was für den Test-Runner der Indikator dafür ist, dass die erste Aufgabe erfolgreich abgeschlossen wurde. Der Aufruf des Test-Runners mittles \texttt{python test\_runner.py} startet einen beiden Umgebungen einen eigenen Python-Prozess.
 
-\begin{figure}[htbp]
-  \centering
-  \includegraphics[width=0.8\textwidth]{00_figures/garden-sim.png}
-  \caption{Startansicht des Garden-Simulators mit ausgeführtem show-Befehl}
-  \label{fig:garden-sim}
-\end{figure}
+\subsubsection{Scenarios}
+
 
 
 \subsubsection{README.md als Informationsquelle}
+
+Die \texttt{README.md} dient den Studierenden als Informationsquelle für die Bearbeitung der Programmieraufgabe. Sie beschreibt das Datenmodell und die Spielregeln, die in Abschnitt~\ref{cha:logische-architektur} erläutert wurden. Weiters enthält sie eine Übersicht der verfügbaren Befehle, eine Erklärung der Symbole im Gartenraster und die Anweisungen zum Starten des Programms. Zwei kurze Tutorials führen durch eine erste Änderung am Code und das Ausführen des Test-Runners. Die Datei soll damit sowohl den Einstieg in die Anwendung unterstützen als auch während der Bearbeitung als Nachschlagewerk dienen.
 
 \subsection{Programmstruktur des \anf{Garden-Simulators}}
 Funktional bildet der Simulator einen festgelegten Handlungszyklus ab: Zuerst wird ein Feld gegraben, anschließend bepflanzt, danach regelmäßig gegossen, die Zeit wird tageweise fortgeschritten und schließlich kann geerntet werden. Die Ausgabe erfolgt im Terminal als leicht lesbares Raster mit einfachen Symbolen, ergänzt um Zeilen- und Spaltenindizes, damit Interaktionen über Koordinaten nachvollziehbar bleiben. 
