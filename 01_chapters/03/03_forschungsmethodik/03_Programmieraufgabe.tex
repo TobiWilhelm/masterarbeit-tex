@@ -81,25 +81,35 @@ Für die Ausgabe des Spielfeldes im Terminal wird die Klasse \texttt{GardenPrint
 Die genaue Zuordnung der funktionalen Zuständigkeiten von Kommandoverarbeitung, Simulationslogik und Darstellung wird in der Entwicklungs-Architektur in Abschnitt~\ref{cha:entwicklungs-architektur} beschrieben.
 
 \subsubsection{Prozessuale Architektur}
-Bei der Prozessarchitektur geht es nach \textcite[S.~4]{kruchten_41_1995} um die Einordnung der wichtigsten Abstraktionen aus der logischen Sicht in die Prozess-Sicht, also die Frage, in welchem Abschnitt eine Operation eines Objekts ausgeführt wird. Weiters geht es um die Darstellung von gleichzeitgen oder wiederkehrenden Abläufen, Verteilung sowie Systemintegrität und Fehlertoleranz \parencite[S.~4]{kruchten_41_1995}.
+Bei der Prozessarchitektur geht es nach \textcite[S.~4]{kruchten_41_1995} um die Einordnung der wichtigsten Abstraktionen aus der logischen Sicht in die Prozess-Sicht, also die Frage, auf welchem \textit{thread} (Ausführungsstrang) eine Operation eines Objekts ausgeführt wird. Dabei werden nichtfunktionale Anforderungen wie Leistung und Verfügbarkeit sowie Fragen der Nebenläufigkeit, Synchronisation, Verteilung, Systemintegrität und Fehlertoleranz betrachtet \parencite[S.~4--5]{kruchten_41_1995}.
 
 Ein Prozess wird definiert als eine Gruppierung von Tasks, die eine ausführbare Einheit bilden. Prozesse können z.B. repliziert werden, um die Verarbeitungslast zu verteilen oder die Verfügbarkeit zu erhöhen. Ein Task ist ein unabhängiger und planbarer Ausführungsstrang auf einem Verarbeitungsknoten. Dabei werden eindeutig adressierbare, architektonisch relevante Haupttasks von unterstützenden Nebentasks unterschieden. Letztere übernehmen beispielsweise zyklische Aktivitäten, Pufferung oder die Behandlung von Zeitüberschreitungen. Haupttasks kommunizieren über Mechanismen wie z.B. synchrone und asynchrone nachrichtenbasierte Kommunikation, entfernte Prozeduraufrufe oder Event-Broadcasts \parencite[S.~4-5]{kruchten_41_1995}.
 
-In Abb. \ref{fig:process-view} sind die Prozesse dargestellt, die im \gs vorzufinden sind. Der Einstiegspunkt in das Programm erfolgt durch den Prozess \textit{Programmstart}. Hier werden
+Im \gs werden die Kommandoverarbeitung, die Simulationslogik und die Darstellung innerhalb eines einzelnen Python-Prozesses auf einem gemeinsamen Ausführungsstrang ausgeführt wie in Abb.~\ref{fig:process-view} dargestellt. Nach \textcite[S.~13]{kruchten_41_1995} kann die prozessuale Architekur bei kleinen Projekten mit nur einem Prozess weggelassen werden. Für eine Beschreibung des Programmflusses wurde das Kapitel trotzdem erstellt.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=0.9\textwidth]{00_figures/process-view.png}
-  \caption{Prozess-Ansicht des Garden Simulators nach \textcite[S.~5-6]{kruchten_41_1995}}
+  \includegraphics[width=0.9\textwidth]{00_figures/process-viewV2.png}
+  \caption{Prozess-Ansicht des Garden Simulators. Eigene Darstellung nach \textcite[S.~5-6]{kruchten_41_1995}}
   \label{fig:process-view}
 \end{figure}
 
+Beim Programmstart werden ein Garten mit fünf Zeilen und fünf Spalten (siehe \ref{fig:garden-sim}), eine Instanz der Klasse \texttt{GardenPrinter} und der Tageszähler \texttt{current\_day} angelegt. Anschließend wartet das Programm in der sogenannten Hauptschleife mittels \texttt{input()} auf eine Eingabe. Der eingegebene Befehl wird durch eine Kontrollstruktur ausgewertet und die entsprechende Funktion der Simulationslogik oder die Darstellung aufgerufen. Nach Abschluss der Verarbeitung wird die nächste Eingabe entgegengenommen. Folglich schreitet die Simulation nur durch Benutzereingaben fort. Es gibt auch keine gleichzeitigen oder asynchronen Aufrufe. Mit \texttt{quit} oder \texttt{exit} wird die Schleife und somit das Programm beendet.
+
+Die in Abb.~\ref{fig:process-view} dargestellte Garten-Verwaltung ist mit der Simulationslogik aus der logischen Architektur (siehe Kapitel \ref{cha:logische-architektur}) gleichzusetzen und verändert abhängig vom aufgerufenen Befehl den Zustand des Gartens. Dazu werden die in Abb. \ref{fig:logik-view} aufgelisteten Funktionen innerhalb des desselben Python-Prozesses ausgeführt. Die Verarbeitung eines Simulationsbefehls wird abgeschlossen und erst dann nimmt die Hauptschliefe wieder den nächsten Befehl entgegen. Die Ausgabe des Spielfelds im Terminal wird von der Klasse \texttt{GardenPrinter} umgesetzt, die den aktuellen Garten als Raster darstellt. Sie wird wie die Garten-Verwaltung im gleichen Ausführungsstrang ausgeführt. 
 
 \subsubsection{Entwicklungs-Architektur}\label{cha:entwicklungs-architektur}
 
 Die Entwicklungs-Architektur beschreibt nach \textcite[S.~6]{kruchten_41_1995} die Organisation der Softwaremodule in ihrer Entwicklungsumgebung. Im Mittelpunkt stehen die modulare Aufteilung sowie deren Import- und Exportbeziehungen. Diese Sicht berücksichtigt insbesondere die einfache Weiterentwicklung, Wiederverwendbarkeit und Verteilung der Entwicklungsaufgaben. Kruchten empfiehlt dazu eine Gliederung in Schichten mit klar definierten Zuständigkeiten, wobei Abhängigkeiten innerhalb derselben oder zu darunterliegenden Schichten verlaufen sollen \parencite[S.~7]{kruchten_41_1995}.
 
-Im \textit{Garden-Simulator} sind die drei Hauptkomponenten \texttt{main.py}, \texttt{garden.py} und \texttt{cli\_view.py} gemeinsam im Projektverzeichnis vorzufinden. Aufgrund der didaktischen Ausrichtung und der damit erforderlichen Reduktion erfolgt keine weitere Aufteilung in Subsysteme. Wie in Abb.~\ref{fig:development-view} dargestellt, bindet \texttt{main.py} sowohl die Funktionen aus \texttt{garden.py} als auch die Klasse \texttt{GardenPrinter} aus \texttt{cli\_view.py} ein. Es übernimmt dabei die Verarbeitung der Eingaben und verbindet so die Simulationslogik mit der Darstellung. Die beiden eingebundenen Module importieren sich einander nicht und haben keine Importabhängigkeit zu \texttt{main.py}. Die Daten aus dem Garten wie z.B. welche Pflanze auf einem Feld platziert ist, werden ihnen als Funktions- bzw. für den \texttt{GardenPrinter} als Methodenparameter übergeben.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.5\textwidth]{00_figures/garden-sim-struc_2.png}
+  \caption{Übersicht des Projektsverzeichnisses des \textit{Garden-Simulators}.}
+  \label{fig:garden-sim-aufbau}
+\end{figure}
+
+In Abb. \ref{fig:garden-sim-aufbau} ist das Projektverzeichnis des \textit{Garden-Simulator} schematisch abgebildet. Es sind dort die drei Hauptkomponenten \texttt{main.py}, \texttt{garden.py} und \texttt{cli\_view.py} gemeinsam vorzufinden. Aufgrund der didaktischen Ausrichtung und der damit erforderlichen Reduktion erfolgt keine weitere Aufteilung in Subsysteme. Wie in Abb.~\ref{fig:development-view} dargestellt, bindet \texttt{main.py} sowohl die Funktionen aus \texttt{garden.py} als auch die Klasse \texttt{GardenPrinter} aus \texttt{cli\_view.py} ein. Es übernimmt dabei die Verarbeitung der Eingaben und verbindet so die Simulationslogik mit der Darstellung. Die beiden eingebundenen Module importieren sich einander nicht und haben keine Importabhängigkeit zu \texttt{main.py}. Die Daten aus dem Garten wie z.B. welche Pflanze auf einem Feld platziert ist, werden ihnen als Funktions- bzw. für den \texttt{GardenPrinter} als Methodenparameter übergeben.
 
 \begin{figure}[htbp]
   \centering
@@ -138,7 +148,7 @@ Die physikalische Architektur behandelt nach \textcite[S.~8]{kruchten_41_1995} d
 
 In der lokalen Variante werden, wie in Abb. \ref{fig:physical-view} a) gezeigt, sämtliche Bestandteile des \textit{Garden-Simulators} einem lokalen Rechner zugeordnet. Die Anwendung wird im Projektverzeichnis mit \texttt{python main.py} gestartet. Der dabei ausgeführte Python-Prozess lädt die Module wie in \ref{cha:entwicklungs-architektur} beschrieben. Diese werden nicht als eigenständige Prozesse gestartet. Die Interaktion erfolgt über die Standardeingabe und Standardausgabe des Terminals. Abb.~\ref{fig:garden-sim} zeigt die Ausgabe nach Ausführung des \texttt{show}-Befehls. Der Benutzer benötigt für diese Ausführungsvariante keine Netzwerkverbindung.
 
-\begin{figure}[htbp]
+\begin{figure}[htb]
   \centering
   \small
   \setlength{\unitlength}{1mm}
@@ -176,44 +186,100 @@ In der lokalen Variante werden, wie in Abb. \ref{fig:physical-view} a) gezeigt, 
 
 In der Prüfungssituation wird hingegen GitHub Codespaces mit einem Devcontainer verwendet. Wie in Abb.~\ref{fig:physical-view} b) dargestellt, fungiert der lokale Rechner dabei als Zugang zur VS-Code-Webclient Entwicklungsumgebung. Der Devcontainer läuft auf einer von GitHub bereitgestellten virtuellen Maschine (VM) \parencite{github_codespaces_deep_dive}. Die Eingaben und Ausgaben werden über die Netzwerkverbindung zwischen dem lokalen Rechner und dem Codespace übertragen. Die Ausführung der Anwendung und der Tests findet im Devcontainer statt. GitHub Codespaces wurde aus zweierlei Gründen als Lösung für die Prüfungssituation herangezogen. Einerseits weil es durch den Devcontainer für jeden Student/jede Studentinn diesselbe Umgebung bereitstellt. Andererseits kann durch die Konfigurationsdatei die VS-Code Entwicklungsumgebung vorab eingestellt werden und so diverse AI-Features deaktiviert werden, was für den Versuch von zentraler Wichtigkeit war.
 
-Die im letzten Absatz angesprochene Konfigurationsdatei befindet sich in der unter \path{.devcontainer/devcontainer.json} des Projektsverzeichnisses. Dort festgelegt sind das Container-Image (\path{mcr.microsoft.com/devcontainers/python:3}) und die VS-Code-Erweiterungen sowie Editor-Einstellungen. Die voreingestellten Erweiterungen sind \texttt{ms-python.python}, \texttt{ms-python.vscode-pylance} und ein Markdown-Previewer namens \texttt{bierner.markdown-preview-github-styles}. Um eine KI-freie Entwicklungsumgebung garantieren zu können, wurden VS-Code-Einstellungen gesetzt wie z.B. \texttt{chat.disableAIFeatures : true}, um KI-Chat-Erweiterungen, oder \texttt{editor.inlineSuggest.enabled : false}, um zeilenweise KI-Codevervollständigung auszuschalten. Zudem wurde der Standardformatierer (\texttt{editor.defaultFormatter}) auf \texttt{NULL} gesetzt sowie \texttt{editor.formatOnSave} ausgeschalten, damit diese automatischen Formatierungshilfen die Kategorie \anf{Layout \& Formatierung} des Bewertungsraster (siehe Abschnitt \ref{cha:bewertungsraster}) nicht beeinflussen. 
+Die im letzten Absatz angesprochene Konfigurationsdatei befindet sich unter \path{.devcontainer/devcontainer.json} im Projektsverzeichnis (siehe Abb. \ref{fig:garden-sim-aufbau}). Dort festgelegt sind das Container-Image (\path{mcr.microsoft.com/devcontainers/python:3}) und die VS-Code-Erweiterungen sowie Editor-Einstellungen. Die voreingestellten Erweiterungen sind \texttt{ms-python.python}, \texttt{ms-python.vscode-pylance} und ein Markdown-Previewer namens \texttt{bierner.markdown-preview-github-styles}. Um eine KI-freie Entwicklungsumgebung garantieren zu können, wurden VS-Code-Einstellungen gesetzt wie z.B. \texttt{chat.disableAIFeatures : true}, um KI-Chat-Erweiterungen, oder \texttt{editor.inlineSuggest.enabled : false}, um zeilenweise KI-Codevervollständigung auszuschalten. Zudem wurde der Standardformatierer (\texttt{editor.defaultFormatter}) auf \texttt{NULL} gesetzt sowie \texttt{editor.formatOnSave} ausgeschalten, damit diese automatischen Formatierungshilfen die Kategorie \anf{Layout \& Formatierung} des Bewertungsraster (siehe Abschnitt \ref{cha:bewertungsraster}) nicht beeinflussen. 
 
 Das aktuelle Garten-Spielfeld und der Tageszähler, der mit \texttt{advance\_day} erhöht werden kann, werdenim Arbeitsspeicher des ausführenden Python-Prozesses gespeichert und bei einem Neustart der Anwendung neu angelegt. Dauerhaft gespeichert wird eine Ernte-Log-Datei für Tomaten: Die Funktion \texttt{create\_tomato\_\allowbreak harvest\_file} legt, wenn nicht vorhanden, das Verzeichnis \texttt{harvests} an und fügt eine Log-Zeile in die Datei \texttt{tomato.txt} ein. Beim vorgesehenen Start im Projektverzeichnis entsteht somit die Datei \texttt{harvests/tomato.txt} innerhalb des Projekts. Lokal liegt diese Datei auf dem verwendeten Rechner (siehe Abb. \ref{fig:physical-view} (a) Lokales Dateisystem), in der Prüfungssituation im Workspace des Codespaces (siehe Abb. \ref{fig:physical-view} (b) Persistenter Workspace). GitHub bindet das Repository im Pfad \path{/workspaces} in den Devcontainer ein und die dort gespeicherten Dateien bleiben beim Stoppen und erneuten Starten des Codespaces erhalten \parencite{github_codespaces_deep_dive}.
 
 Der Grund für die Erstellung eines Ernte-Logs für Tomaten ist die erste Aufgabe (siehe Abschnitt \ref{cha:Aufgabenstellung}). Um diese Aufgabe erfolgreich zu absolvieren, müssen die Studierenden das Python-Programm über die Kommandozeile kennenlernen und mindestens einen Ernte-Zyklus für eine Tomate durchspielen. Am Ende des Zyklus wird die \texttt{tomato.txt} erstellt, was für den Test-Runner der Indikator dafür ist, dass die erste Aufgabe erfolgreich abgeschlossen wurde. Der Aufruf des Test-Runners mittles \texttt{python test\_runner.py} startet einen beiden Umgebungen einen eigenen Python-Prozess.
 
-\subsubsection{Scenarios}
+\subsubsection{Szenario: Anbau und Ernte}
 
+Nach \textcite[S.~9]{kruchten_41_1995} veranschaulichen Szenarien das Zusammenwirken der Elemente aus den vier Architektursichten anhand einem konkreten Anwendungsfall. Sie beschreiben die Abfolge und die Interaktionen zwischen den beteiligten Elementen. Während der Planungsphase unterstützen sie die Identifikation benötigter Architekturelemente. In einem weiteren Schritt dienen sie der Veranschaulichung und Überprüfung der Architektur und können als Ausgangspunkt für Tests verwendet werden. Für den \textit{Garden-Simulator} wird im Folgenden ein vollständiger Anbau- und Erntezyklus (siehe Abb. \ref{fig:scenarios-view}) einer Tomate mit abschließender Testcase-Überprüfung mittels Test-Runners betrachtet. Das Szenario bezieht sich auf das für die Studierenden bereitgestellte Ausgangsprogramm und bildet Aufgabe 1 der Studie ab (siehe Kapitel \ref{cha:Aufgabenstellung} für eine Detailansicht der Aufgabenstellung).
 
-
-\subsubsection{README.md als Informationsquelle}
-
-Die \texttt{README.md} dient den Studierenden als Informationsquelle für die Bearbeitung der Programmieraufgabe. Sie beschreibt das Datenmodell und die Spielregeln, die in Abschnitt~\ref{cha:logische-architektur} erläutert wurden. Weiters enthält sie eine Übersicht der verfügbaren Befehle, eine Erklärung der Symbole im Gartenraster und die Anweisungen zum Starten des Programms. Zwei kurze Tutorials führen durch eine erste Änderung am Code und das Ausführen des Test-Runners. Die Datei soll damit sowohl den Einstieg in die Anwendung unterstützen als auch während der Bearbeitung als Nachschlagewerk dienen.
-
-\subsection{Programmstruktur des \anf{Garden-Simulators}}
-Funktional bildet der Simulator einen festgelegten Handlungszyklus ab: Zuerst wird ein Feld gegraben, anschließend bepflanzt, danach regelmäßig gegossen, die Zeit wird tageweise fortgeschritten und schließlich kann geerntet werden. Die Ausgabe erfolgt im Terminal als leicht lesbares Raster mit einfachen Symbolen, ergänzt um Zeilen- und Spaltenindizes, damit Interaktionen über Koordinaten nachvollziehbar bleiben. 
-
-Diese Regeln sind in einer Zustandslogik definiert: 
-
-
-\begin{itemize}
-    \item Graben ist nur auf leeren Feldern möglich und erzeugt ein „hole“
-    \item Pflanzen ist ausschließlich auf einem „hole“ erlaubt und erzeugt ein „seed“
-    \item Gießen ist nur bei „seed“ oder „sprout“ zulässig und erhöht den Wasserstand bis zu einem Maximalwert
-    \item Das Fortschreiten eines Tages wirkt auf alle Zellen gleichzeitig. Der Wasserstand wird pro neuem Tag um 1 verringert.
-    \item Ernten ist wiederum nur im Zustand „ripe“ möglich
-\end{itemize}
-
-Die in Abb. \ref{fig:garden-sim-aufbau} gezeigte Repository-Struktur trennt klar zwischen Kernlogik, Darstellung und Interaktion. In garden.py liegt die zentrale Logik als Sammlung von Funktionen; dort werden gezielt Stubs mit Docstrings, Kommentaren und Beispielen bereitgestellt, die zunächst noch nicht implementiert sind und teils NotImplementedError auslösen. In cli\_view.py befindet sich eine vorgegebene, von Studierenden nicht zu verändernde Hilfsklasse (GardenPrinter), die den Garten ausschließlich liest und als Text darstellt; dadurch wird eine konsistente Visualisierung sichergestellt, ohne dass Studierende bereits objektorientierte Konzepte benötigen. main.py stellt eine einfache Kommandozeilen-Interaktion bereit, in der Befehle wie \texttt{dig r c}, \texttt{plant r c crop}, \texttt{water r c}, \texttt{day}, \texttt{harvest r c} oder \texttt{show} eingegeben werden können. Das Parsing erfolgt bewusst mit String split und if/else, um den Fokus auf Kontrollstrukturen, Zustandsprüfungen und Datenmanipulation zu legen.
-
-\begin{figure}[htbp]
+\begin{figure}[p]
   \centering
-  \includegraphics[width=0.5\textwidth]{00_figures/garden-sim-struc_2.png}
-  \caption{Repository-Aufbau des \anf{Garden-Simulators}}
-  \label{fig:garden-sim-aufbau}
+  \scriptsize
+  \setlength{\unitlength}{1mm}
+  \begin{picture}(150,219)
+    \put(0,212){\makebox(150,7)[l]{\textbf{a) Simulation}}}
+    \put(0,202){\framebox(28,8){Benutzer}}
+    \put(30,202){\framebox(28,8){\texttt{main.py}}}
+    \put(60,202){\framebox(28,8){\texttt{garden.py}}}
+    \put(89,202){\framebox(30,8){\texttt{GardenPrinter}}}
+    \put(122,202){\framebox(28,8){Dateisystem}}
+    {\color{gray}
+      \multiput(14,201)(0,-3){44}{\line(0,-1){1.5}}
+      \multiput(44,201)(0,-3){44}{\line(0,-1){1.5}}
+      \multiput(74,201)(0,-3){41}{\line(0,-1){1.5}}
+      \multiput(104,201)(0,-3){34}{\line(0,-1){1.5}}
+      \multiput(136,201)(0,-3){46}{\line(0,-1){1.5}}
+    }
+    \put(14,195){\vector(1,0){30}}
+    \put(14,195.5){\makebox(30,5)[b]{\texttt{dig r c}}}
+    \put(44,187){\vector(1,0){30}}
+    \put(44,187.5){\makebox(30,5)[b]{\texttt{dig()}}}
+    \put(14,179){\vector(1,0){30}}
+    \put(14,179.5){\makebox(30,5)[b]{\texttt{plant r c tomato}}}
+    \put(44,171){\vector(1,0){30}}
+    \put(44,171.5){\makebox(30,5)[b]{\texttt{plant()}}}
+    \put(5,125){\framebox(78,42){}}
+    \put(6,160){\makebox(76,6)[l]{\colorbox{white}{Drei Tageswechsel mit Bewässerung}}}
+    \put(14,154){\vector(1,0){30}}
+    \put(14,154.5){\makebox(30,5)[b]{\texttt{water r c}}}
+    \put(44,146){\vector(1,0){30}}
+    \put(44,146.5){\makebox(30,5)[b]{\texttt{water()}}}
+    \put(14,138){\vector(1,0){30}}
+    \put(14,138.5){\makebox(30,5)[b]{\texttt{day}}}
+    \put(44,130){\vector(1,0){30}}
+    \put(44,130.5){\makebox(30,5)[b]{\texttt{advance\_day()}}}
+    \put(14,118){\vector(1,0){30}}
+    \put(14,118.5){\makebox(30,5)[b]{\texttt{show}}}
+    \put(44,110){\vector(1,0){60}}
+    \put(44,110.5){\makebox(60,7)[b]{\colorbox{white}{\shortstack{Daten zur Darstellung\\übergeben}}}}
+    \put(104,102){\vector(-1,0){90}}
+    \put(14,102.5){\makebox(90,5)[b]{\colorbox{white}{Gartenraster im Terminal}}}
+    \put(14,94){\vector(1,0){30}}
+    \put(14,94.5){\makebox(30,5)[b]{\texttt{harvest r c}}}
+    \put(44,86){\vector(1,0){30}}
+    \put(44,86.5){\makebox(30,5)[b]{\texttt{harvest()}}}
+    \put(74,78){\vector(1,0){62}}
+    \put(74,78.5){\makebox(62,7)[b]{\colorbox{white}{\shortstack{Erstellung von\\\texttt{harvests/tomato.txt}}}}}
+    \put(14,70){\vector(1,0){30}}
+    \put(14,70.5){\makebox(30,5)[b]{\texttt{quit}}}
+
+    \put(0,44){\makebox(150,7)[l]{\textbf{b) Anschließende Überprüfung mit dem Test-Runner}}}
+    \put(0,33){\framebox(28,9){Benutzer}}
+    \put(51,33){\framebox(46,9){\shortstack{\texttt{test\_runner.py}}}}
+    \put(122,33){\framebox(28,9){Dateisystem}}
+    {\color{gray}
+      \multiput(14,32)(0,-3){10}{\line(0,-1){1.5}}
+      \multiput(74,32)(0,-3){10}{\line(0,-1){1.5}}
+      \multiput(136,32)(0,-3){6}{\line(0,-1){1.5}}
+    }
+    \put(14,25){\vector(1,0){60}}
+    \put(14,25.5){\makebox(60,5)[b]{\texttt{python test\_runner.py}}}
+    \put(74,15){\vector(1,0){62}}
+    \put(74,15.5){\makebox(62,5)[b]{\texttt{tomato.txt} als Indikator prüfen}}
+    \put(74,5){\vector(-1,0){60}}
+    \put(14,5.5){\makebox(60,5)[b]{Testbericht im Terminal}}
+  \end{picture}
+  \caption[Szenario: Anbau- und Erntezyluses und anschließende Testprüfung]{Interaktionsablauf eines Anbau- und Erntezyluses einer Tomate mit anschließender Test-Runner-Ausführung. Eigene Darstellung nach \textcite[S.~9--10]{kruchten_41_1995}.}
+  \label{fig:scenarios-view}
 \end{figure}
 
-In test\_garden.py sind unter Zuhilfenamhe des pytest-Frameworks Unit-Tests hinterlegt, die für jede Funktion konkret festlegen, welches Verhalten erwartet wird wie z. B. erlaubte Zustandswechsel, Rückgabewerte oder out-of-bounds-Fälle. Für Studierende dienen diese Tests als verlässliche Referenz, weil sie nach jeder Implementationsänderung sofortiges, objektives Feedback liefern und typische Fehler klar sichtbar machen. Gleichzeitig bilden die Tests eine transparente Grundlage für die Auswertung. Wenn das Programm alle Tests besteht, erfüllt es Level 4 der Kategorie \enquote{Funktionaliät und Robustheit} des Bewertungsrasters in Tabelle \ref{tab:bewertungsrasterV2}.
+Ausgangspunkt ist ein leeres Feld im Garten wie in Abb. \ref{fig:garden-sim} zu sehen ist. Die Studierenden geben zunächst \texttt{dig r c} und anschließend \texttt{plant r c tomato} ein, wobei \texttt{r} und \texttt{c} eine frei wählbare Zeilen- und Spaltenkoordinaten sind. Die Kommandoverarbeitung in \texttt{main.py} wertet die Eingaben aus und ruft die entsprechenden Funktionen in \texttt{garden.py} auf. Diese ändern den Status des Feldes von \texttt{empty} zu \texttt{hole} und danach zu \texttt{seed}. Beim \texttt{plant}-Befehl wird außerdem die Pflanzenart \texttt{tomato} eingetragen.
+
+Anschließend führen die Studierenden dreimal nacheinander die Befehle \texttt{water r c} und \texttt{day} aus. Das Gießen setzt den Wasserstand des Feldes auf eins. Der anschließende Aufruf von \texttt{advance\_day()} verarbeitet den Tageswechsel für den gesamten Garten. Für das bepflanzte und bewässerte Feld erhöht sich dabei \texttt{days\_as\_seed} um eins. Der Wasserstand wird so wieder auf null herabgesetzt. Nach dem dritten Tageswechsel mit Bewässerung erreicht die Tomate den Zustand \texttt{ripe}. Mit \texttt{show} können die Studierenden den aktuellen Garten aufrufen. Ein großes \texttt{R} markiert die reife Pflanze am ausgegebenen Spielfeld.
+
+Mit \texttt{harvest r c} wird anschließend die Ernte ausgelöst. Die Simulationslogik setzt das Feld auf \texttt{empty} zurück, entfernt die Pflanzenart und setzt den Wasserstand und die Wachstumstage auf null zurück. Bei der Tomatenernte wird außerdem ein Eintrag in \path{harvests/tomato.txt} geschrieben. Das Verzeichnis wird, wenn nicht vorhanden, angelegt. Danach beenden die Studierenden den Simulator mit \texttt{quit} und starten im selben Ordner mit \texttt{python test\_runner.py} den Test-Runner. Dieser wird in einem eigenen Python-Prozess ausgeführt und nutzt die vorhandene \path{tomato.txt} als Indikator für das Bestehen ersten Aufgabe. Der ausgegebene Testbericht enthält auch die Ergebnisse zu den weiteren Aufgaben, die im Ausgangsprogramm noch nicht vollständig erfüllt sind. Die Funktionsweise des Testrunners wird in Abschnitt~\ref{cha:test-runner} erläutert. Es sei an dieser Stelle erwähnt, dass dieser Test von den Studierenden umgangen werden kann, indem sie die Datei im richtigen Verzeichnis selbst erstellen. Um aber an diese Information zu gelangen, erfodert es mehr Verständnis des Programmcodes als in der ersten Aufgabe überhaupt gefordert wird, zumal es bei dieser lediglich um die Interaktion mit der Kommandozeilenschnittstelle geht. 
+
+Abb.~\ref{fig:scenarios-view} stellt den Anbau- und Erntezyklus einer Tomate und die anschließende Prüfung durch den Test-Runner als zwei aufeinanderfolgende Abläufe dar. Den ersten Ausführungsstrang bilden die squentiellen Aufrufe von Kommandoverarbeitung, Simulationslogik und Darstellung. Die Tomatendatei bleibt nach dem Beenden dieses Prozesses erhalten und steht in weiterer Folge dem Test-Runner zur Verfügung. Lokal liegt sie auf dem verwendeten Rechner im Projektverzeichnis, bei der Ausführung in GitHub Codespaces im dortigen Workspace. 
+
+Als Variante dieses Szenarios sei das Ausbleiben der Bewässerung erwähnt. Wird nach dem Pflanzen ein \texttt{day}-Befehl ohne vorheriges Gießen ausgeführt, erhöht die Kommandoverarbeitung zwar den globalen Tageszähler \texttt{current\_day}, das unbewässerte Feld erhält jedoch keinen Wachstumstag. Sein Status als \texttt{seed} bleibt erhalten und \texttt{days\_as\_seed} bleibt unverändert. Für die Ernte sind weiterhin drei bewässerte Tageswechsel erforderlich.
+
+\subsection{README.md als schriftliche Unterstützung}
+
+Die \texttt{README.md}-Datei dient den Studierenden als Informationsquelle bei der Bearbeitung der Programmieraufgabe. Sie beschreibt das Datenmodell und die Spielregeln, die in Abschnitt~\ref{cha:logische-architektur} erläutert wurden. Weiters enthält sie eine Übersicht der verfügbaren Befehle, eine Erklärung der Status-Symbole im Gartenraster und die Anweisungen zum Starten des Programms. Zwei kurze Tutorials führen durch eine erste Änderung am Code und das Ausführen des Test-Runners. Die Datei soll damit sowohl den Einstieg in die Anwendung unterstützen als auch während der Bearbeitung als Nachschlagewerk dienen.
 
 \subsection{Erstellung der Aufgaben nach UMC-Framework}\label{cha:Aufgabenstellung}
 Als Programmieraufgabe sollen die Studierenden in der bestehenden Python CLI-Anwendung \textit{Garden-Simulator} bestimmte Use Cases implementieren. Das didaktische Design dieser Unterrichtseinheit basiert auf dem Use-Modify-Create (UMC) Framework, wie es ursprünglich von \textcite{lee_umc_2011} definiert wurde. Empirische Studien, wie die von \textcite[S.~400]{lytle_use_2019} zeigen, dass dieser Ansatz insbesondere ab der Modify-Phase zum einen die Identifikation mit dem selbst geschriebenen Code (Ownership) stärkt. Zum anderen und für diese Arbeit wichtiger wird auch die Überforderung bzw. die kognitve Last auf Studierendenseite reduziert.
