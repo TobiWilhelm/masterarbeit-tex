@@ -313,7 +313,94 @@ Die folgenden Aufgaben sind von den Studierenden zu implementieren.
 \end{enumerate}
 
 \subsection{Musterlösung der Aufgaben und Programmierkonzepte}
-TODO, todo
+Im Folgenden wird eine mögliche Umsetzung der im vorhergehenden Abschnitt beschriebenen Aufgaben erläutert. Die folgenden Codeausschnitte zeigen die ergänzten bzw. angepassten Stellen in \texttt{main.py} und \texttt{garden.\allowbreak py}. Dabei wird zwischen den bereits bereitgestellten Programmteilen und den Änderungen unterschieden, die von den Studierenden vorzunehmen sind.
+
+\paragraph*{Aufgabe 1: Anwendung kennenlernen}
+Für diese Aufgabe ist keine Änderung am Quellcode erforderlich. Listing~\ref{lst:loesung-aufgabe-1} zeigt die Eingaben für einen vollständigen Anbau- und Erntezyklus einer Tomate auf dem Feld mit den Koordinaten \texttt{0 0}. Der Ablauf entspricht dem in Abb.~\ref{fig:scenarios-view} dargestellten Szenario. Nach dem Vorbild der in Abschnitt \ref{cha:Aufgabenstellung} besprochenen \textit{Use-Phase} lernen die Studierenden hier die bestehende Anwendung und die Reihenfolge der für die Ernte erforderlichen Befehle kennen.
+
+\begin{lstlisting}[style=mystyle,language={},caption={Befehlsfolge zur Bearbeitung von Aufgabe 1.},label={lst:loesung-aufgabe-1}]
+help
+dig 0 0
+plant 0 0 tomato
+water 0 0
+day
+water 0 0
+day
+water 0 0
+day
+harvest 0 0
+\end{lstlisting}
+
+\paragraph*{Aufgabe 2: Hilfe-Ausgabe ergänzen}
+Die Hilfetabelle wird in der Funktion \texttt{print\_\allowbreak help\_\allowbreak table()} aus \texttt{main.py} nach Ausführung des \texttt{help}-Befehls erzeugt. Die dort erzeugte Liste \texttt{rows} enthält für jeden Befehl ein Tupel aus drei Zeichenketten: dem Befehlsnamen, der Beschreibung und einem Beispiel. Für die Erfüllung der zweiten Aufgabe wird dieser Liste der \texttt{quit}-Eintrag, gezeigt in Listing~\ref{lst:loesung-aufgabe-2}, hinzugefügt. Hierfür müssen die Studierenden den Aufbau der Liste und der Tupel nachvollziehen und einen weiteren Eintrag in derselben Form ergänzen. Die Ausgabe der Tabelle im Terminal ist bereits implementiert. Als Hilfestellung ist der Berech im Code mittels Kommentaren markiert, in den die Änderung für diese Aufgabe einzufügen ist.
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,gobble=8,caption={Zusätzlicher Eintrag in der Liste rows in main.py.},label={lst:loesung-aufgabe-2}]
+        rows = [
+            ...
+            ("quit", "Exit the simulator", "quit"),
+            ...
+        ]
+\end{lstlisting}
+
+\paragraph*{Aufgabe 3: Text-Ausgabe}
+In der Funktion \texttt{create\_\allowbreak tomato\_\allowbreak harvest\_\allowbreak file()} in \texttt{garden.\allowbreak py} sind der Zeitstempel und das Schreiben in die Datei bereits implementiert. Die Studierenden ergänzen am Ende der Funktion die in Listing~\ref{lst:loesung-aufgabe-3} gezeigte \texttt{print}-Funktion. Die Methode \texttt{format()} ersetzt den Platzhalter \texttt{\{0\}} durch den Wert in der Variable \texttt{current\_\allowbreak datetime}. Die Aufgabe erfordert damit eine Konsolenausgabe und die Verwendung einer Variable innerhalb einer Zeichenkette. Auch bei dieser Aufgabe ist als Hiflestellung der Implementierungsbereich im Code mittles Kommentaren markiert.
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,gobble=4,caption={Ergänzte Ausgabe in create\_tomato\_harvest\_file().},label={lst:loesung-aufgabe-3}]
+    print("Created file 'tomato.txt' at {0}".format(current_datetime))
+\end{lstlisting}
+
+\paragraph*{Aufgabe 4: Andere Pflanzen unterscheiden}
+\begingroup
+\setlength{\emergencystretch}{1em}
+Die Funktion \texttt{harvest()} prüft bereits, ob eine Tomate geerntet wurde, und ruft in diesem Fall die oben beschriebene Funktion zum Schreiben der Ernte-Nachricht auf (\texttt{create\_\allowbreak tomato\_\allowbreak harvest\_\allowbreak file()}). Für alle Pflanzenarten außer Tomaten wird der \texttt{else}-Zweig aus Listing~\ref{lst:loesung-aufgabe-4} ergänzt. Die Variable \texttt{harvested\_crop} enthält die Pflanzenart des Feldes. Ihr Wert wird mittels \texttt{format()} in die Meldung im \texttt{else}-Zweig eingefügt. Zusätzlich zur formatierten Konsolenausgabe aus Aufgabe 3 ist als Steigerung der Komplexität eine bedingte Verzweigung erforderlich. Zusätzlich wurde bei dieser Aufgabe der Code-Bereich, in welchem die Adaption durchzuführen ist, nicht mehr mit Kommentaren markiert. Dies steigert zudem den Schwierigkeitsgrad der Aufgabe.
+\par
+\endgroup
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,gobble=4,caption={Fallunterscheidung bei der Ernte in harvest().},label={lst:loesung-aufgabe-4}]
+    if harvested_crop == "tomato":
+        create_tomato_harvest_file()
+    else:
+        print("[Info] The crop {0} has no file entry.".format(harvested_crop))
+\end{lstlisting}
+
+\paragraph*{Aufgabe 5: Kartoffel als neue Pflanze ergänzen}
+Die fünfte Aufgabe erfordert Änderungen in beiden Dateien \texttt{main.py} und \texttt{garden.\allowbreak py}. In \texttt{main.py} wird die Liste \texttt{CROPS} um den Eintrag \texttt{potato} erweitert, wie es in Listing~\ref{lst:loesung-aufgabe-5-crops} dargestellt ist. Die Kommandoverarbeitung prüft anhand dieser Liste, ob die beim Pflanzen eingegebene Pflanzenart zulässig ist. Die Hilfetabelle, die beim \texttt{help}-Befehl ausgegeben wird, verwendet dieselbe Liste und führt dadurch auch die neue Pflanzenart an.
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,caption={Erweiterte Liste der Pflanzenarten in main.py.},label={lst:loesung-aufgabe-5-crops}]
+CROPS = ["carrot", "tomato", "bean", "potato"]
+\end{lstlisting}
+
+In \texttt{garden.\allowbreak py} wird für die Kartoffel die zusätzliche Konstante bzw. globale Variable \texttt{RIPE\_\allowbreak DAYS\_\allowbreak FROM\_\allowbreak SEED\_\allowbreak potato} mit dem Wert zwei angelegt. Die vorhandene Konstante \texttt{RIPE\_\allowbreak DAYS\_\allowbreak FROM\_\allowbreak SEED} behält für die übrigen Pflanzenarten den Wert drei. Listing~\ref{lst:loesung-aufgabe-5-konstanten} zeigt die Initialisierung der beiden Variablen.
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,caption={Konstanten für die Reifedauer in garden.py.},label={lst:loesung-aufgabe-5-konstanten}]
+RIPE_DAYS_FROM_SEED = 3
+RIPE_DAYS_FROM_SEED_potato = 2
+\end{lstlisting}
+
+Die Funktion \texttt{advance\_day()} wird um eine Fallunterscheidung anhand der Pflanzenart erweitert. Listing~\ref{lst:loesung-aufgabe-5-wachstum} zeigt die vollständige Funktion der Musterlösung inklusive der Erweiterung der If-Verzweigungen von Zeile sieben bis Zeile 11. In Zeile zehn wird für \texttt{potato} der Wachstumszähler mit dem neuen Schwellenwert verglichen, für die übrigen Pflanzenarten mit dem bisherigen Wert (Zeile 15). Erreicht der Zähler den jeweiligen Schwellenwert, erhält das Feld den Zustand \texttt{ripe}. Die beiden verschachtelten Schleifen in den Zeilen 5 und 6 sind bereits im Ausgangsprogramm vorhanden. Die Studierenden müssen diese bestehende Struktur nachvollziehen und die Wachstumslogik innerhalb der bestehenden Funktion anpassen. Bei dieser Aufgabe gibt es den größten Gestaltungsfreiraum, zumal auch hier auf Code-Kommentare zur Kennzeichnung der Änderungsbereiche verzichtet wurde.
+
+\begin{lstlisting}[style=mystyle,language=Python,columns=fullflexible,basicstyle=\ttfamily\fontsize{9}{11}\selectfont,caption={Angepasste Wachstumslogik in advance\_day().},label={lst:loesung-aufgabe-5-wachstum}]
+def advance_day(garden):
+    if not garden:
+        return True
+
+    for row in garden:
+        for cell in row:
+            if cell["crop"] == "potato":
+                    if cell["state"] == "seed" and cell["water"] >= GROWTH_WATER_NEEDED:
+                        cell["days_as_seed"] += 1
+                    if cell["days_as_seed"] >= RIPE_DAYS_FROM_SEED_potato:
+                        cell["state"] = "ripe"
+            else:
+                if cell["state"] == "seed" and cell["water"] >= GROWTH_WATER_NEEDED:
+                    cell["days_as_seed"] += 1
+                if cell["days_as_seed"] >= RIPE_DAYS_FROM_SEED:
+                    cell["state"] = "ripe"
+            cell["water"] -= 1
+    return True
+\end{lstlisting}
+
+Die Reife nach zwei bzw. drei \texttt{water}- und \texttt{day}-Zyklen bezieht sich auf den vorgesehenen Ablauf ohne zusätzliche unbewässerte Tageswechsel. Als Randnotiz und aus Gründen der Transparenz sei erwähnt, dass die dargestellte Musterlösung eine Eigenheit des Ausgangsprogramms übernimmt. Denn der Wasserstand wird bei jedem Tageswechsel um eins verringert, ohne den Minimalwert auf null zu begrenzen. Nach einem Tag ohne Gießen kann so ein negativer Wasserstand entstehen. In einer aktualisierten Version des \gs könnte man auf diese Weise das Austrocknen einer Pflanze simulieren.
 
 
 \subsection{Lokale Tests zur Selbstüberprüfung}\label{cha:test-runner}
