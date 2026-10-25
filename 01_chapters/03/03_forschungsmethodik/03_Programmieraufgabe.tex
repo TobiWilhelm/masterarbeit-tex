@@ -281,10 +281,12 @@ Als Variante dieses Szenarios sei das Ausbleiben der Bewässerung erwähnt. Wird
 
 Die \texttt{README.md}-Datei dient den Studierenden als Informationsquelle bei der Bearbeitung der Programmieraufgabe. Sie beschreibt das Datenmodell und die Spielregeln, die in Abschnitt~\ref{cha:logische-architektur} erläutert wurden. Weiters enthält sie eine Übersicht der verfügbaren Befehle, eine Erklärung der Status-Symbole im Gartenraster und die Anweisungen zum Starten des Programms. Zwei kurze Tutorials führen durch eine erste Änderung am Code und das Ausführen des Test-Runners. Die Datei soll damit sowohl den Einstieg in die Anwendung unterstützen als auch während der Bearbeitung als Nachschlagewerk dienen.
 
-\subsection{Erstellung der Aufgaben nach UMC-Framework}\label{cha:Aufgabenstellung}
-Als Programmieraufgabe sollen die Studierenden in der bestehenden Python CLI-Anwendung \textit{Garden-Simulator} bestimmte Use Cases implementieren. Das didaktische Design dieser Unterrichtseinheit basiert auf dem Use-Modify-Create (UMC) Framework, wie es ursprünglich von \textcite{lee_umc_2011} definiert wurde. Empirische Studien, wie die von \textcite[S.~400]{lytle_use_2019} zeigen, dass dieser Ansatz insbesondere ab der Modify-Phase zum einen die Identifikation mit dem selbst geschriebenen Code (Ownership) stärkt. Zum anderen und für diese Arbeit wichtiger wird auch die Überforderung bzw. die kognitve Last auf Studierendenseite reduziert.
+\subsection{Erstellung der Aufgaben}\label{cha:Aufgabenstellung}
+Als Programmieraufgabe sollen die Studierenden in der bestehenden Python CLI-Anwendung \textit{Garden-Simulator} bestimmte Use Cases implementieren. Das didaktische Design dieser Unterrichtseinheit basiert auf dem Use-Modify-Create (UMC) Framework, wie es ursprünglich von \textcite{lee_umc_2011} definiert wurde. \textcite[S.~398--400]{lytle_use_2019} berichten in einer Untersuchung an Schulen über Unterschiede in der wahrgenommenen Schwierigkeit und im Gefühl, den bearbeiteten Code als eigenes Werk anzusehen, die sogenannte \textit{Code-Ownership}. In der Modify-Phase war dieses Gefühl in der UMC-Gruppe stärker ausgeprägt als in der Vergleichsgruppe. Eine erhöhte kognitive Belastung bei erstmaliger Code-Erstellung der Vergleichsgruppe wird als mögliche Erklärung für die subjektiv wahrgenommene Schwierigkeit diskutiert. 
 
-Die Programmieraufgabe ist in die drei Phase des UMC-Frameworks aufgeteilt. In der ersten Phase (Use) geht es um das Kennenlernen und Ausführen des Source Codes. Im Fall des Garden-Simulators sollen auch einfach Commands in das Command Line Interface (CLI) eingegeben und ausgeführt werden. Die zweite Phase fordert von den Studierenden, den in Phase 1 genutzten Code iterativ anzupassen. Um den Code gezielt zu verändern, muss auf Seite der Studierenden zumindest Teile der inneren Logik durchdrungen worden sein. Die dritte und finale Phase besteht aus der Erweiterung des bestehenden Artefakts. Die Studierenden fügen hier weitesgehend eigenständig eine neue Funktion hinzu. Was zu implemtieren ist, wird aufgrund der begrenzten Zeit verbal vorgegeben, auf eine zu detaillierte Aufgabenbeschreibung oder Hinweise im Code wurden jedoch verzichtet. \parencite{lee_umc_2011}.
+Die Programmieraufgabe orientiert sich an den drei Phasen des UMC-Frame\-works. In der ersten Phase (Use) geht es um das Kennenlernen und Ausführen des Source Codes. Im Fall des Garden-Simulators entspricht dies Aufgabe 1, in der Befehle in die Kommandozeilenschnittstelle eingegeben und ausgeführt werden. Die zweite Phase (Modify) umfasst die Aufgaben 2 bis 4 und fordert von den Studierenden, den Code iterativ anzupassen. Um diesen gezielt zu verändern, müssen auf Seite der Studierenden zumindest Teile der inneren Logik durchdrungen worden sein.
+
+Die fünfte und abschließende Aufgabe besteht aus einer selbstständigeren Erweiterung des bestehenden Artefakts um eine neue Funktionalität. Was zu implementieren ist, wird in der untenstehenden Aufgabenbeschreibung definiert. Diese Aufgabe wird im vorliegenden Design als Annäherung an die Create-Phase verstanden. \textcite[S.~35]{lee_umc_2011} beschreiben für diese Phase die Umsetzung eigener Projektideen, betonen aber zugleich die fließenden Übergänge zwischen den Phasen modify und create. Die vorliegende Aufgabe bleibt aus Zeitgründen eine festgelegte Erweiterung, die Umsetzung im Code unterliegt aber keiner genauen Vorgabe.
 
 Die folgenden Aufgaben sind von den Studierenden zu implementieren. 
 \begin{enumerate}
@@ -312,7 +314,43 @@ Die folgenden Aufgaben sind von den Studierenden zu implementieren.
 
 \end{enumerate}
 
-\subsection{Musterlösung der Aufgaben und Programmierkonzepte}
+Die Auswahl der den einzelnen Aufgaben zugrundeliegenden Programmierkonzepte wird im Folgenden anhand gesicherter Inhalte aus der Programmierausbildung vollzogen. So identifizieren \textcite[S.~99]{tew_developing_2010} auf Grundlage einer Lehrbuchanalyse unter anderem Variablen, Zeichenketten, einfache Ein- und Ausgabe, Vergleichsoperatoren und Kontrollstrukturen als gemeinsame konzeptuelle Grundlagen von Einführungskursen. Die Aufgaben des \textit{Garden-Simulators} greifen diese Konzepte auf. Die Zuordnung in Tabelle~\ref{tab:aufgaben-programmierkonzepte} wurde anhand der Aufgabenstellung und der nachfolgenden Musterlösungen (siehe Abschnitt \ref{cha:musterloesung}) vorgenommen. Die Auflistung zeigt übersichtsmäßig pro Aufgabe die behandelten Programmier-Konzepte und die Phasenzuordnung der Unterchtsmodelle. Zu erkennen ist außerdem der kontinuierliche Zuwachs an Komplexität der Programmier-Konzepte. So sind es in Aufgabe zwei Zeichenketten, Listen und Tupel und in Aufgabe fünf sind es u.a. Listen, Verzweigungen und Schleifen.
+
+\begin{table}[htbp]
+  \centering
+  \small
+  \begin{tabularx}{\textwidth}{@{}YYYY@{}}
+    \toprule
+    \textbf{Aufgabe} & \textbf{Inhaltliche Schwerpunkte} & \textbf{UMC-Phase} & \textbf{PRIMM-Phase} \\
+    \midrule
+    1: Anwendung kennenlernen &
+    Befehlsfolge und beobachtbare Zustandsänderungen &
+    Use & Run \\
+    \addlinespace
+    2: Hilfe-Ausgabe ergänzen* &
+    Zeichenketten, Listen und Tupel &
+    Modify & Modify \\
+    \addlinespace
+    3: Text-Ausgabe ergänzen* &
+    Konsolenausgabe, Variablen und formatierte Ausgabe &
+    Modify & Modify \\
+    \addlinespace
+    4: Andere Pflanzen unterscheiden &
+    Bedingte Verzweigung und formatierte Ausgabe &
+    Modify & Modify \\
+    \addlinespace
+    5: Kartoffel als neue Pflanze ergänzen &
+    Listen, Variablen, Verzweigungen und Schleifen &
+    Modify+/Create & Modify \\
+    \bottomrule
+  \end{tabularx}
+  \caption[Programmierkonzepte und Phasenzuordnung der Teilaufgaben]{Programmierkonzepte und Phasenzuordnung der Teilaufgaben\newline *... Kennzeichnung des Änderungsbereichs mittels Kommentaren im Code}
+  \label{tab:aufgaben-programmierkonzepte}
+\end{table}
+
+Eine didaktische Orientierung für die Abfolge der Aufgaben bietet neben UMC auch der PRIMM-Ansatz (Predict, Run, Investigate, Modify, Make) von \textcite[S.~13-16]{sentance_teaching_2019}. Dort beschreiben wird der Aufbau einer Lerneinheit von der Ausführung und Untersuchung vorhandenen Codes über Änderungen im Code bis zur Erstellung neuer Programme aus einer Problembeschreibung. Die Aufgabenkonzeption des \textit{Garden-Simulator} folgt auch in Teilen diesem Konzept. Die Phasenzuordnung der Aufgaben nach PRIMM-Ansatz ist in \ref{tab:aufgaben-programmierkonzepte} ebenfalls dargestellt. Dadurch dass PRIMM als umfangreiches Konzept zur Unterrichtsplanung und somit zum Wissenserwerb entwickelt wurde, finden sich in den Aufgaben der Studie keine Predict- und Investigate-Phase. Die Make-Phase findet aufgrund der begrenzten Zeit auch keine Anwendung. 
+
+\subsection{Musterlösung der Aufgaben und Programmierkonzepte}\label{cha:musterloesung}
 Im Folgenden wird eine mögliche Umsetzung der im vorhergehenden Abschnitt beschriebenen Aufgaben erläutert. Die folgenden Codeausschnitte zeigen die ergänzten bzw. angepassten Stellen in \texttt{main.py} und \texttt{garden.\allowbreak py}. Dabei wird zwischen den bereits bereitgestellten Programmteilen und den Änderungen unterschieden, die von den Studierenden vorzunehmen sind.
 
 \paragraph*{Aufgabe 1: Anwendung kennenlernen}
@@ -401,6 +439,10 @@ def advance_day(garden):
 \end{lstlisting}
 
 Die Reife nach zwei bzw. drei \texttt{water}- und \texttt{day}-Zyklen bezieht sich auf den vorgesehenen Ablauf ohne zusätzliche unbewässerte Tageswechsel. Als Randnotiz und aus Gründen der Transparenz sei erwähnt, dass die dargestellte Musterlösung eine Eigenheit des Ausgangsprogramms übernimmt. Denn der Wasserstand wird bei jedem Tageswechsel um eins verringert, ohne den Minimalwert auf null zu begrenzen. Nach einem Tag ohne Gießen kann so ein negativer Wasserstand entstehen. In einer aktualisierten Version des \gs könnte man auf diese Weise das Austrocknen einer Pflanze simulieren.
+
+Wie in diesem Abschnitt zu erkennen war, sind die Änderungen, die von den Studierenden durchzuführen sind, an den Code-Zeilen gemessen, recht gering. Aufgabe 5 bildet hiervon eine Ausnahme. Trotzdem sei erwähnt, dass aus einer geringen Anzahl der zu ändernden Codezeilen nicht sofort auf eine geringe Schwierigkeit für ProgrammieranfängerInnen geschlossen werden kann. Eine Grundlage dafür liefert die Studie von \textcite[S.~119--120]{lister_multi-national_2004}. Dort wird von der Schwierigkeit der Studierenden berichtet, die Ausgabe kurzer Programme vorherzusagen und passende Ergänzungen für unvollständigen Code auszuwählen. Für die vorliegenden Aufgaben lässt sich daraus übertragen, dass eine Änderung, die wenige Codezeilen benötigt, für die Studierenden eine relevante Verständnisanforderung enthalten kann. So muss z.B. bei Aufgabe 4 nachvollzogen werden, unter welcher Bedingung die bestehende Ausgabe erfolgt und an welcher Stelle diese einzufügen ist.
+
+Vor allem bei ProgrammiereinsteigerInnen stellt das Verstehen bestehenden Codes oftmals eine Hürde dar, was in den folgenden Papers ählich wie bei \textcite[S.~119-120]{lister_multi-national_2004} konkretisieren wurde. In der Literaturübersicht von \textcite[S.~1-5]{qian_students_2017} schreiben die AutorInnen von Verständnsprobleme bei bedingten Verzweigungen und beim Nachvollziehen eines Variablentauschs aus nur drei Codezeilen. Bei der Fehlersuche beobachteten \textcite[S.~105]{fitzgerald_debugging_2008}, dass Studierende zwar gefundene Fehler meist beheben konnten, jedoch deren Auffinden Schwierigkeiten bereitete. Eine ergänzende theoretische Einordnung bietet die Übersicht von \textcite[S.~40]{duran_cognitive_2022}: Die kognitive Belastung hängt davon ab, welche miteinander verknüpften Elemente gleichzeitig verarbeitet werden müssen und welches Vorwissen die Lernenden mitbringen. Aus diesem Grund wurde beim \gs bzw. in der Vorbereitung der Studie der Schwierigkeitsgrad der Aufgaben tendentiell niedriger gewählt und die Aufgaben auch in der Pilotphase validiert, siehe dafür Abschnitt \ref{cha:pilotphase}.
 
 
 \subsection{Lokale Tests zur Selbstüberprüfung}\label{cha:test-runner}
