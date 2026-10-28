@@ -1,3 +1,46 @@
 \section{Motivation \& Zielsetzung}
 
-\section{Studiendesign und Versuchsaufbau}
+\section{Phasen und Ablauf der Studie}
+
+\subsection{Pilotphase}
+Die Pilotstudie wird für die Erpobung der einzelnen Elemente der Hauptstudie herangezogen. Besonderes Augenmerk liegt auf der Kalibrierung der Prüfungsaufgaben. Diese müssen so gestaltet sein, dass sie für die Gruppe mit LLM-Unterstützung nicht zu leicht lösbar sind und für die Gruppe ohne LLM-Unterstützung nicht zu überfordernd werden.
+
+In der Pilotstudie wird darauf Acht gegeben, dass (1) die Aufgabe in der vorgegebenen Zeit machbar ist, und (2) die Studierenden ein laut Bewertungsraster mit "bestanden" bewertbares Ergebnis erreichen.
+
+Sollten die Datenerhebungen aus der Pilotstudie auf Probleme in der Aufgabenstellung hinweisen, etwa einen unangemessenen Schwierigkeitsgrad oder eine nicht passende Bearbeitungszeit (zu kurz oder zu lang), können diese vorläufigen Erkenntnisse genutzt werden, um die Aufgaben für die Hauptstudie gezielt anzupassen.
+
+Als Gruppengröße werden zwei Personen als Stichprobe pro Gruppe veranschlagt, somit liegt die Anzahl des Pilots bei \texttt{n=4}. Die Pilot-ProbandInnen sollen einen möglichst ähnlichen Hintergrund wie die Studierenden der Hauptstudie haben und wurden dementsprechend ausgewählt. Als Ablauf des Pilots sind die folgenden Schritte aus Abbildung \ref{fig:flow-pilotstudie} geplant:
+
+\begin{figure}[htbp]
+  \centering
+  \begin{tikzpicture}[
+    node distance=9mm and 7mm,
+    process/.style={
+      draw=black!80, fill=white, line width=0.8pt,
+      text width=\dimexpr(\linewidth-14mm-32pt)/3\relax,
+      minimum height=24mm, inner xsep=5pt, inner ysep=5pt,
+      align=center, font=\fontsize{10pt}{14pt}\selectfont
+    },
+    flow/.style={-{Stealth[length=2.5mm]}, line width=0.8pt}
+  ]
+    \node[process] (questionnaire1) {Bearbeitung Fragebogen 1:\\Selbsteinschätzung};
+    \node[process, right=of questionnaire1] (environment) {Einführung in die\\Entwicklungsumgebung};
+    \node[process, right=of environment] (presentation) {Präsentation der Aufgabe\\und Beantwortung\\anfallender Fragen};
+    \node[process, below=of presentation] (task) {Bearbeitung der Aufgabe\\durch die TeilnehmerInnen};
+    \node[process, left=of task] (questionnaire2) {Bearbeitung Fragebogen 2:\\UEQ nach der Aufgabe};
+    \node[process, left=of questionnaire2] (collection) {Screen Recording\\speichern und\\finalen Code einsammeln};
+    \draw[flow] (questionnaire1) -- (environment);
+    \draw[flow] (environment) -- (presentation);
+    \draw[flow] (presentation) -- (task);
+    \draw[flow] (task) -- (questionnaire2);
+    \draw[flow] (questionnaire2) -- (collection);
+  \end{tikzpicture}
+  \caption{Ablauf der Pilotstudie}
+  \label{fig:flow-pilotstudie}
+\end{figure}
+
+Nach der Vorstellung erfolgt als erstes die Bearbeitung des ersten Fragebogens, bei dem es um die Selbsteinschätzung der Studierenden geht. Danach werden die Teilnehmenden in die Entwicklungsumgebung VS Code eingeführt und sichergegangen, ob alle Vorraussetzungen vorhanden sind: Python und Intellisense sind installiert und die Bildschirmaufzeichnung ist startklar. Anschließend wird die Aufgabe vorgestellt und erklärt wie die lokalen Tests ausgeführt werden können. Nach der Bearbeitung aller Teilaufgaben folgt der zweite Fragebogen. Dieser behandelt das Thema der User Experience. Der letzte Schritt stellt das Einsammeln des Codes und der Bildschirmaufnahme dar.
+
+Während der Druchführung des Pilots werden von der Studienleitung verbesserungswürdige Themen niedergeschrieben, um diese in agiler Art und Weise vor erneuter Durchführung einzuarbeiten. Die Auswertung der Pilotphase wird in Abschnitt \ref{cha:pilot_auswertung} beschrieben.
+
+\subsection{Hauptstudie}
